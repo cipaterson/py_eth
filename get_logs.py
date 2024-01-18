@@ -5,7 +5,7 @@ import logging
 import sys
 import os
 
-InfuraApiKey = os.environ.get("INFURA_API_KEY")
+InfuraApiKey = os.environ.get("ETH")
 
 
 logger = logging.getLogger("web3")

@@ -26,13 +26,11 @@ defaultNetworks = [
     "sepolia",
     "goerli",
     "arbitrum-goerli",
-    "aurora-testnet",
     "avalanche-fuji",
     "base-goerli",
     "celo-alfajores",
     # "bnbsmartchain-testnet",  # project ID does not have access to binance
     "linea-goerli",
-    "near-testnet",
     "optimism-goerli",
     "palm-testnet",
     "polygon-mumbai",

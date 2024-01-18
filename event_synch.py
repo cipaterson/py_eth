@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from web3 import Web3, IPCProvider
 import time
 import os
@@ -5,7 +7,7 @@ InfuraApiKey = os.environ.get("INFURA_API_KEY")
 
 
 # instantiate Web3 instance
-w3 = Web3(Web3.HTTPProvider('https://goerli.infura.io/v3/' + InfuraApiKey))
+w3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/' + InfuraApiKey))
 
 def handle_event(event):
     print(event)
