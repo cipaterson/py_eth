@@ -6,7 +6,7 @@ import json
 import argparse
 
 parser = argparse.ArgumentParser(
-    description='Test support exists for every eth_method for every network')
+    description='Send eth_method to network and return result')
 parser.add_argument('-k', '--api_key', metavar='INFURA_API_KEY', default=None,
                     help='Infura API Key to use (INFURA_API_KEY env var used by default).')
 parser.add_argument('-v', '--verbose', action='store_true', default=False,

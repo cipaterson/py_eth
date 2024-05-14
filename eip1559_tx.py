@@ -11,9 +11,11 @@ theChainIds = {
     "sepolia": 11155111,
     "linea-mainnet": 59144,
     "linea-goerli": 59140,
+    "avalanche-mainnet": 43114,
+    "avalanche-fuji": 43113,
 }
 
-network='sepolia'
+network='avalanche-fuji'
 
 infura_url = f'https://{network}.infura.io/v3/{os.getenv("INFURA_API_KEY")}'
 
@@ -34,7 +36,7 @@ except exceptions.InvalidAddress:
 
 nonce = web3.eth.get_transaction_count(from_account)
 print(f'get_transaction_count={nonce}')
-fee_per_gas='0.1'
+fee_per_gas='26'
 tx = {
     'type': '0x2',
     'nonce': nonce,
