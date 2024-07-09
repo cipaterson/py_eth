@@ -5,8 +5,7 @@ import sys
 import json
 import argparse
 from datetime import datetime
-
-# this is basically a copy of eth_req, batch request test
+import time
 
 parser = argparse.ArgumentParser(
     description='Send eth_method to network and return result')
@@ -15,7 +14,6 @@ parser.add_argument('-k', '--api_key', metavar='INFURA_API_KEY', default=None,
 parser.add_argument('-v', '--verbose', action='store_true', default=False,
                     help='Make output more verbose.')
 parser.add_argument("network", help="network to request on")
-# parser.add_argument("data", help="request to execute")
 
 args = parser.parse_args()
 # print(args)
@@ -31,11 +29,9 @@ network = args.network
 verbose = args.verbose
 
 
-data = '[\n'
-for i in range(10):
-  data +=f'{{"jsonrpc": "2.0", "method": "eth_blockNumber", "params": [], "id": {i}}},\n'
-data = data[:-2]
-data += '\n]'
+# data='{"jsonrpc": "2.0", "method": "debug_traceBlockByNumber", "params": ["latest", {"tracer": "callTracer", "timeout": "120s"}], "id": 3095109}'
+# eth_blockNumber, eth_chainId, net_version, web3_clientVersion
+data='{"jsonrpc": "2.0", "method": "eth_blockNumber", "params": [], "id": 1}'
 if verbose:
   print(data)
 
@@ -43,9 +39,11 @@ url = f'https://{network}.infura.io/v3/{InfuraApiKey}'
 
 i=0
 while True:
-  i+=1
+  i += 1
+  t = time.time()
   try:
     response = requests.post(url, data=data)
+    # print(f'Requests.post time={time.time()-t:7.3f}')
   except:
     print(f"Error: Can't connect: {url}", file=sys.stderr)
     exit(1)
@@ -63,14 +61,12 @@ while True:
     exit(1)
 
   if verbose:
-    print(datetime.now(), i, response.text[:120])
+    print(datetime.now(), i, f'{time.time()-t:10.3f}', response.text[:120])
 
   jResponse = json.loads(response.text)
 
-  for res in jResponse:
-    if res.get('error') == None:
-      # print(f'{res["result"]}')
-      pass
-    else:
-      print(f'{res["error"]}')
-      exit(1)
+  if jResponse.get('error') == None:
+    pass ## print(f'{jResponse["result"]}')
+  else:
+    print(f'{jResponse["error"]}')
+    ##exit(1)

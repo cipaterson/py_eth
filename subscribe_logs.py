@@ -6,6 +6,8 @@ from websockets import connect
 import os
 import sys
 import copy
+from datetime import datetime
+import time
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -13,7 +15,8 @@ load_dotenv()
 InfuraApiKey = os.environ.get("INFURA_API_KEY")
 network = os.environ.get("ETHEREUM_NETWORK")
 
-infura_ws_url = f'wss://{network}.infura.io/ws/v3/' + InfuraApiKey
+infura_ws_url = f'wss://{network}.infura.io/ws/v3/{InfuraApiKey}'
+print(infura_ws_url)
 
 contract_address = "0xdAC17F958D2ee523a2206206994597C13D831ec7"  # USDT Tether token
 topic_transfer = Web3.keccak(text='Transfer(address,address,uint256)').hex()
@@ -21,7 +24,7 @@ method_transfer = Web3.keccak(text='transfer(address,uint256)').hex()[:10]
 
 
 async def get_event():
-    async with connect(infura_ws_url, ping_interval=None) as ws:
+    async with connect(infura_ws_url) as ws:    ### , ping_interval=None
         request = ('{{"jsonrpc": "2.0", "id": 1, "method": "eth_subscribe",'
                    '"params": ["logs",'
                    '{{"address": "{}"'
@@ -55,6 +58,7 @@ async def get_event():
                         result = response["result"]
                         for t in result["transactions"]:
                             if method_transfer == t["input"][:10] and t["to"] == contract_address.lower():
+                                # time.sleep(1)#xxxxx
                                 hash = t["hash"]
                                 request = '{{"jsonrpc":"2.0","method":"eth_getTransactionReceipt","params": ["{}"],"id":4}}'.format(
                                     hash)
@@ -80,9 +84,9 @@ async def get_event():
                                     tx_hashes[hash]["onchain"] = t
 
                         # The end of processing the latest block is a good time to print a summary of the collected txs and events
-                        print("count tx hashes:", len(tx_hashes))
+                        print(datetime.now(), "count tx hashes:", len(tx_hashes))
                         if re_org:
-                            print("Blockchain re-org!")
+                            print("========================== Blockchain re-org!")
                             re_org = False
                         failed_txs = 0
                         for t in iter(tx_hashes):
@@ -114,6 +118,7 @@ async def get_event():
                     elif response["id"] == 4:   # eth_getTransactionReceipt response
                         if "result" not in response:
                             print("Error: result not in ",response)
+                            continue#xxx
                         result = response["result"]
                         hash = result["transactionHash"]
                         # print(f'{hash}, {result["status"]=}')
@@ -151,6 +156,7 @@ async def get_event():
                         exit(1)
             except () as e:
                 print("exception ", e)
+                print(f'{result=}')
 
 if __name__ == "__main__":
     asyncio.run(get_event())
