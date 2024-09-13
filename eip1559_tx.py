@@ -8,6 +8,7 @@ import json
 import time
 import sys
 import argparse
+from chainids import theChainIds
 
 parser = argparse.ArgumentParser(
     description='Send, zero value, Type 2 transaction to network and retry if gas is too low.')
@@ -28,14 +29,6 @@ if os.environ.get("SIGNER_PRIVATE_KEY") is None:
     parser.print_help()
     exit(1)
 
-theChainIds = {
-    "mainnet": 1,
-    "sepolia": 11155111,
-    "linea-mainnet": 59144,
-    "linea-goerli": 59140,
-    "avalanche-mainnet": 43114,
-    "avalanche-fuji": 43113,
-}
 network = args.network or os.getenv("ETHEREUM_NETWORK")
 InfuraApiKey = args.api_key or os.getenv("INFURA_API_KEY")
 
