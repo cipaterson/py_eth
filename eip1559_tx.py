@@ -17,7 +17,7 @@ parser.add_argument('-k', '--api_key', metavar='INFURA_API_KEY', default=None,
 parser.add_argument('-v', '--verbose', action='store_true', default=False,
                     help='Make output more verbose.')
 parser.add_argument('-g', '--gas', type=str, choices=["low", "medium", "high", "cheap", "vcheap"], default="cheap",
-                    help='Choose gas price level, default is very cheap.')
+                    help='Choose gas price level, default is cheap.')
 parser.add_argument(
     "-n", "--network", help="network to request on (default: use ETHEREUM_NETWORK env var)")
 
